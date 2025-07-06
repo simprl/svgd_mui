@@ -1,0 +1,36 @@
+name: Update MUI Icons
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v3
+
+      - name: Checkout only MUI icons folder
+        uses: actions/checkout@v3
+        with:
+          repository: mui/material-ui
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: mui-material-ui
+          fetch-depth: 1
+          sparse-checkout: |
+            packages/mui-icons-material/material-icons
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+      - name: Generate icons
+        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js
+
+      - name: Commit icons
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add ./icons
+          git commit -m "chore: update generated icons" || echo "No changes to commit"
+          git push
