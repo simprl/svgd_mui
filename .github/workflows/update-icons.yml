@@ -24,6 +24,7 @@ jobs:
           path: mui-material-ui
           fetch-depth: 1
           persist-credentials: false
+
           sparse-checkout: |
             packages/mui-icons-material/material-icons
 
