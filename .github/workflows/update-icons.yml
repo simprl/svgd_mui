@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Generate icons
-        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js
+        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js --format material
 
       - name: Commit icons
         run: |
