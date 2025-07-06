@@ -3,13 +3,18 @@ name: Update MUI Icons
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout your repo
+      - name: Checkout this repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout only MUI icons folder
         uses: actions/checkout@v3
@@ -18,6 +23,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: mui-material-ui
           fetch-depth: 1
+          persist-credentials: false
+
           sparse-checkout: |
             packages/mui-icons-material/material-icons
 
