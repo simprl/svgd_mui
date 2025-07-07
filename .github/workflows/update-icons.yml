@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout only MUI icons folder
+      - name: Checkout MUI icons
         uses: actions/checkout@v3
         with:
           repository: mui/material-ui
@@ -27,6 +27,7 @@ jobs:
 
           sparse-checkout: |
             packages/mui-icons-material/material-icons
+            packages/mui-icons-material/package.json
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -34,11 +35,24 @@ jobs:
       - name: Generate icons
         run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js --format material --html ./html/index.html --dts
 
+      - name: Sync version from MUI package
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const muiPkg = JSON.parse(fs.readFileSync('mui-material-ui/packages/mui-icons-material/package.json', 'utf8'));
+          pkgVersion = pkg.version.split(".");
+          muiPkgVersion = muiPkg.version.split(".");
+          pkg.version = (muiPkgVersion[0] * 10000 + muiPkgVersion[1] * 1 > pkgVersion[0] * 10000 + pkgVersion[1] * 1) ? muiPkg.version : [muiPkgVersion[0], muiPkgVersion[1], muiPkgVersion[2] * 1 >= pkgVersion[2] * 1 ? muiPkgVersion[2] : pkgVersion[2] * 1 + 1].join(".");
+          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          EOF
+
       - name: Commit icons
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
           git add ./icons
           git add ./html
+          git add package.json
           git commit -m "chore: update generated icons" || echo "No changes to commit"
           git push
