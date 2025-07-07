@@ -1,9 +1,6 @@
 # @svgd/icons-material
 
-![npm](https://img.shields.io/npm/v/@svgd/icons-material)
-![Downloads](https://img.shields.io/npm/dm/@svgd/icons-material)
-![Build](https://github.com/…/actions/workflows/ci.yml/badge.svg)
-![License](https://img.shields.io/npm/l/@svgd/icons-material)
+[![](https://img.shields.io/npm/v/@svgd/icons-material?style=flat)](https://www.npmjs.com/package/@svgd/icons-material)
 
 A single-file collection of Material UI icon paths with IDE preview in the autocomplete.
 
