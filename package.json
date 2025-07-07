@@ -1,20 +1,31 @@
 {
   "name": "@svgd/icons-material",
   "version": "7.2.0",
-  "description": "Single-file Material UI icon paths with IDE preview.",
+  "description": "A single-file collection of Material UI icon paths with IDE preview in the autocomplete.",
   "main": "icons/paths.js",
   "types": "icons/paths.d.ts",
   "files": [
-    "icons",
-    "html"
+    "icons"
   ],
-  "scripts": {
-    "deploy": "echo 'Use GitHub Actions to deploy'"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/example/svgd_icons-material"
+    "url": "https://github.com/simprl/svgd_mui"
   },
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "keywords": [
+    "svg",
+    "svgd",
+    "material-icons",
+    "mui-icons",
+    "mui",
+    "material-ui",
+    "icons-material",
+    "svg-icons",
+    "icon-library",
+    "svg-constants",
+    "optimized",
+    "tree-shakeable"
+  ],
+  "author": "simprl"
 }
