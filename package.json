@@ -1,0 +1,20 @@
+{
+  "name": "@svgd/icons-material",
+  "version": "0.0.1",
+  "description": "Single-file Material UI icon paths with IDE preview.",
+  "main": "icons/paths.js",
+  "types": "icons/paths.d.ts",
+  "files": [
+    "icons",
+    "html"
+  ],
+  "scripts": {
+    "deploy": "echo 'Use GitHub Actions to deploy'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/svgd_icons-material"
+  },
+  "license": "MIT",
+  "type": "module"
+}
