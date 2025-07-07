@@ -32,13 +32,13 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Generate icons
-        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js --format material  --md ./docs/icons.md --html ./docs/icons.html --dts
+        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js --format material --html ./html/icons.html --dts
 
       - name: Commit icons
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
           git add ./icons
-          git add ./docs
+          git add ./html
           git commit -m "chore: update generated icons" || echo "No changes to commit"
           git push
