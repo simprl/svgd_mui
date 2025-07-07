@@ -1,6 +1,6 @@
 {
   "name": "@svgd/icons-material",
-  "version": "0.0.1",
+  "version": "7.2.0",
   "description": "Single-file Material UI icon paths with IDE preview.",
   "main": "icons/paths.js",
   "types": "icons/paths.d.ts",
