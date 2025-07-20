@@ -1,6 +1,6 @@
 {
   "name": "@svgd/icons-material",
-  "version": "7.2.1",
+  "version": "7.2.2",
   "description": "A single-file collection of Material UI icon paths with IDE preview in the autocomplete.",
   "main": "icons/paths.js",
   "types": "icons/paths.d.ts",
@@ -38,9 +38,9 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.2.0",
     "@mui/material": "^7.2.0",
+    "@svgd/cli": "^1.0.33",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "@svgd/cli": "^1.0.33",
     "vite": "^6.3.5"
   }
 }
