@@ -16,43 +16,63 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Checkout MUI icons
-        uses: actions/checkout@v4
-        with:
-          repository: mui/material-ui
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: mui-material-ui
-          fetch-depth: 1
-          persist-credentials: false
-
-          sparse-checkout: |
-            packages/mui-icons-material/material-icons
-            packages/mui-icons-material/package.json
-
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
 
-      - name: Generate icons
-        run: npx -y @svgd/cli --input mui-material-ui/packages/mui-icons-material/material-icons --output ./icons/paths.js --format material --html ./html/index.html --dts
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Sync version from MUI package
+      - name: Update MUI packages to latest
+        run: npm install @mui/material@latest @mui/icons-material@latest
+
+      - name: Generate SVG sources
+        run: npm run gen-svg
+
+      - name: Generate icon paths
+        run: npm run gen-pathes
+
+      - name: Sync version from @mui/icons-material dependency
         run: |
           node - <<'EOF'
           const fs = require('fs');
-          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-          const muiPkg = JSON.parse(fs.readFileSync('mui-material-ui/packages/mui-icons-material/package.json', 'utf8'));
-          pkgVersion = pkg.version.split(".");
-          muiPkgVersion = muiPkg.version.split(".");
-          pkg.version = (muiPkgVersion[0] * 10000 + muiPkgVersion[1] * 1 > pkgVersion[0] * 10000 + pkgVersion[1] * 1) ? muiPkg.version : [muiPkgVersion[0], muiPkgVersion[1], muiPkgVersion[2] * 1 >= pkgVersion[2] * 1 ? muiPkgVersion[2] : pkgVersion[2] * 1 + 1].join(".");
-          fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          const pkgPath = 'package.json';
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+
+          // Read the version range from dependencies (or devDependencies)
+          const depRange =
+            (pkg.dependencies && pkg.dependencies['@mui/icons-material']) ||
+            (pkg.devDependencies && pkg.devDependencies['@mui/icons-material']);
+          if (!depRange) {
+            console.error('Cannot find @mui/icons-material in dependencies');
+            process.exit(1);
+          }
+
+          // Strip leading ^, ~, etc.
+          const muiVersion = depRange.replace(/^[^\d]*/, '');
+
+          const [pMaj, pMin, pPatch] = pkg.version.split('.').map(Number);
+          const [mMaj, mMin, mPatch] = muiVersion.split('.').map(Number);
+
+          // If major/minor of MUI advanced, sync exactly; otherwise bump patch as needed
+          if (mMaj * 10000 + mMin > pMaj * 10000 + pMin) {
+            pkg.version = `${mMaj}.${mMin}.${mPatch}`;
+          } else {
+            const nextPatch =
+              mMaj === pMaj && mMin === pMin
+                ? Math.max(mPatch, pPatch) + 1
+                : Math.max(mPatch, pPatch);
+            pkg.version = `${pMaj}.${pMin}.${nextPatch}`;
+          }
+
+          fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
           EOF
 
-      - name: Commit icons
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add ./icons
-          git add ./html
-          git add package.json
+          git add icons html package.json
           git commit -m "chore: update generated icons" || echo "No changes to commit"
           git push

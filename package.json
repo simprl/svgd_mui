@@ -11,6 +11,11 @@
     "type": "git",
     "url": "https://github.com/simprl/svgd_mui"
   },
+  "scripts": {
+    "build": "vite build",
+    "gen-svg": "vite build && node dist/generate-icons.cjs",
+    "gen-pathes": "svgd --input ./svg --output ./icons/paths.js --format material --html ./html/index.html --dts"
+  },
   "license": "MIT",
   "type": "module",
   "keywords": [
@@ -27,5 +32,15 @@
     "optimized",
     "tree-shakeable"
   ],
-  "author": "simprl"
+  "author": "simprl",
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "@svgd/cli": "^1.0.33",
+    "vite": "^6.3.5"
+  }
 }
