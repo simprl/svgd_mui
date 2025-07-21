@@ -1,6 +1,6 @@
 {
   "name": "@svgd/icons-material",
-  "version": "7.2.2",
+  "version": "7.2.3",
   "description": "A single-file collection of Material UI icon paths with IDE preview in the autocomplete.",
   "main": "icons/paths.js",
   "types": "icons/paths.d.ts",
@@ -27,6 +27,7 @@
     "material-ui",
     "icons-material",
     "svg-icons",
+    "svg sprite",
     "icon-library",
     "svg-constants",
     "optimized",
